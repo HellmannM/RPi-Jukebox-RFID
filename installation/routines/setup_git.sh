@@ -1,3 +1,4 @@
+return;
 GIT_ABORT_MSG="Aborting dir to git repo conversion.
 Your directory content is untouched, you simply cannot use git for updating / developing"
 

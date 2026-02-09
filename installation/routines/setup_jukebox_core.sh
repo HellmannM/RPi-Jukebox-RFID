@@ -40,21 +40,21 @@ _jukebox_core_install_python_requirements() {
 
   cd "${INSTALLATION_PATH}" || exit_on_error
 
-  python3 -m venv $VIRTUAL_ENV
+#  python3 -m venv $VIRTUAL_ENV
   source "$VIRTUAL_ENV/bin/activate"
 
-  pip install --upgrade pip
-  # Remove excluded libs, if installed - see https://github.com/MiczFlor/RPi-Jukebox-RFID/pull/2470
-  pip uninstall -y -r "${INSTALLATION_PATH}"/requirements-excluded.txt
-
-  # prepare lgpio build for bullseye as the binaries are broken
-  local pip_install_options=""
-  if [ "$(is_debian_version_at_least 12)" = false ]; then
-    _jukebox_core_build_and_install_lgpio
-    pip_install_options="--no-binary=lgpio"
-  fi
-
-  pip install --no-cache-dir -r "${INSTALLATION_PATH}/requirements.txt" ${pip_install_options}
+#  pip install --upgrade pip
+#  # Remove excluded libs, if installed - see https://github.com/MiczFlor/RPi-Jukebox-RFID/pull/2470
+#  pip uninstall -y -r "${INSTALLATION_PATH}"/requirements-excluded.txt
+#
+#  # prepare lgpio build for bullseye as the binaries are broken
+#  local pip_install_options=""
+#  if [ "$(is_debian_version_at_least 12)" = false ]; then
+#    _jukebox_core_build_and_install_lgpio
+#    pip_install_options="--no-binary=lgpio"
+#  fi
+#
+#  pip install --no-cache-dir -r "${INSTALLATION_PATH}/requirements.txt" ${pip_install_options}
 }
 
 _jukebox_core_configure_pulseaudio() {
@@ -64,18 +64,19 @@ _jukebox_core_configure_pulseaudio() {
 }
 
 _jukebox_core_build_libzmq_with_drafts() {
-  print_lc "    Building libzmq v${JUKEBOX_ZMQ_VERSION} with drafts support"
-  local zmq_filename="zeromq-${JUKEBOX_ZMQ_VERSION}"
-  local zmq_tar_filename="${zmq_filename}.tar.gz"
-  local cpu_count=${CPU_COUNT:-$(python3 -c "import os; print(os.cpu_count())")}
-
-  cd "${JUKEBOX_ZMQ_TMP_DIR}" || exit_on_error
-  wget --quiet https://github.com/zeromq/libzmq/releases/download/v${JUKEBOX_ZMQ_VERSION}/${zmq_tar_filename} || exit_on_error "Download failed"
-  tar -xzf ${zmq_tar_filename}
-  rm -f ${zmq_tar_filename}
-  cd ${zmq_filename} || exit_on_error
-  ./configure --prefix=${JUKEBOX_ZMQ_PREFIX} --enable-drafts --disable-Werror
-  make -j${cpu_count} && sudo make install
+  print_lc "    skipping libzmq v${JUKEBOX_ZMQ_VERSION} with drafts support"
+#  print_lc "    Building libzmq v${JUKEBOX_ZMQ_VERSION} with drafts support"
+#  local zmq_filename="zeromq-${JUKEBOX_ZMQ_VERSION}"
+#  local zmq_tar_filename="${zmq_filename}.tar.gz"
+#  local cpu_count=${CPU_COUNT:-$(python3 -c "import os; print(os.cpu_count())")}
+#
+#  cd "${JUKEBOX_ZMQ_TMP_DIR}" || exit_on_error
+#  wget --quiet https://github.com/zeromq/libzmq/releases/download/v${JUKEBOX_ZMQ_VERSION}/${zmq_tar_filename} || exit_on_error "Download failed"
+#  tar -xzf ${zmq_tar_filename}
+#  rm -f ${zmq_tar_filename}
+#  cd ${zmq_filename} || exit_on_error
+#  ./configure --prefix=${JUKEBOX_ZMQ_PREFIX} --enable-drafts --disable-Werror
+#  make -j${cpu_count} && sudo make install
 }
 
 _jukebox_core_download_prebuilt_libzmq_with_drafts() {

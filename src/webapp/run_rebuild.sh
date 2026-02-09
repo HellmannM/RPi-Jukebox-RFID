@@ -77,44 +77,45 @@ calc_nodemem() {
         echo -e "  Free usable memory: ${free_to_use} MB\n"
     fi
 
-    if [[ -z $NODEMEM ]]; then
-        # mininum memory used for node
-        local mem_min=512
-        if [[ $free_to_use -gt $mem_min ]]; then
-            NODEMEM=$free_to_use
-        else
-            echo "  WARN: Not enough memory left on system for node (usable ${free_to_use} MB, min. ${mem_min} MB)."
-            echo "        Trying to adjust swap size ..."
+#    if [[ -z $NODEMEM ]]; then
+#        # mininum memory used for node
+#        local mem_min=512
+#        if [[ $free_to_use -gt $mem_min ]]; then
+#            NODEMEM=$free_to_use
+#        else
+#            echo "  WARN: Not enough memory left on system for node (usable ${free_to_use} MB, min. ${mem_min} MB)."
+#            echo "        Trying to adjust swap size ..."
+#
+#            local add_swap_size=$((mem_min / 2))
+#            local new_swap_size=$((swap_total + add_swap_size))
+#
+#            # keep a buffer on the filesystem
+#            local filesystem_needed=$((add_swap_size + 512))
+#            local filesystem_free=$(df -BM -P / | tail -n 1 | awk '{print $4}')
+#            filesystem_free=${filesystem_free//M}
+#
+#            if [ "$VERBOSE" == true ]; then
+#                echo "  New swap size = $new_swap_size MB"
+#                echo "  Additional filesystem space needed = $filesystem_needed MB"
+#                echo "  Current free filesystem space = $filesystem_free MB"
+#            fi
+#
+#            if [ "${filesystem_free}" -lt "${filesystem_needed}" ]; then
+#                echo "  ERROR: Not enough space available on filesystem for swap (free ${filesystem_free} MB, min. ${filesystem_needed} MB). Abort!"
+#                exit 1
+#            elif ! change_swap $new_swap_size ; then
+#                echo "  ERROR: failed to change swap size. Abort!"
+#                exit 1
+#            fi
+#
+#            calc_nodemem || return 1
+#        fi
+#
+#    elif [[ $NODEMEM -gt $free_to_use ]]; then
+#        echo "  ERROR: Requested node memory setting is larger than usable free memory: ${NODEMEM} MB > ${free_to_use} MB (free ${total_free} MB - buffer ${mem_buffer} MB). Abort!"
+#        exit 1
+#    fi
 
-            local add_swap_size=$((mem_min / 2))
-            local new_swap_size=$((swap_total + add_swap_size))
-
-            # keep a buffer on the filesystem
-            local filesystem_needed=$((add_swap_size + 512))
-            local filesystem_free=$(df -BM -P / | tail -n 1 | awk '{print $4}')
-            filesystem_free=${filesystem_free//M}
-
-            if [ "$VERBOSE" == true ]; then
-                echo "  New swap size = $new_swap_size MB"
-                echo "  Additional filesystem space needed = $filesystem_needed MB"
-                echo "  Current free filesystem space = $filesystem_free MB"
-            fi
-
-            if [ "${filesystem_free}" -lt "${filesystem_needed}" ]; then
-                echo "  ERROR: Not enough space available on filesystem for swap (free ${filesystem_free} MB, min. ${filesystem_needed} MB). Abort!"
-                exit 1
-            elif ! change_swap $new_swap_size ; then
-                echo "  ERROR: failed to change swap size. Abort!"
-                exit 1
-            fi
-
-            calc_nodemem || return 1
-        fi
-
-    elif [[ $NODEMEM -gt $free_to_use ]]; then
-        echo "  ERROR: Requested node memory setting is larger than usable free memory: ${NODEMEM} MB > ${free_to_use} MB (free ${total_free} MB - buffer ${mem_buffer} MB). Abort!"
-        exit 1
-    fi
 }
 
 calc_nodemem

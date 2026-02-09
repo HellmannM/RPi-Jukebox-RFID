@@ -11,14 +11,14 @@
 export LC_ALL=C
 
 # Set Repo variables if not specified when calling the script
-GIT_USER=${GIT_USER:-"MiczFlor"}
-GIT_BRANCH=${GIT_BRANCH:-"future3/main"}
+#GIT_USER=${GIT_USER:-"MiczFlor"}
+#GIT_BRANCH=${GIT_BRANCH:-"future3/main"}
 
 # Constants
 GIT_REPO_NAME="RPi-Jukebox-RFID"
-GIT_URL="https://github.com/${GIT_USER}/${GIT_REPO_NAME}"
-echo GIT_BRANCH $GIT_BRANCH
-echo GIT_URL $GIT_URL
+#GIT_URL="https://github.com/${GIT_USER}/${GIT_REPO_NAME}"
+#echo GIT_BRANCH $GIT_BRANCH
+#echo GIT_URL $GIT_URL
 
 CURRENT_USER="${SUDO_USER:-$(whoami)}"
 CURRENT_USER_GROUP=$(id -gn "$CURRENT_USER")
@@ -99,27 +99,28 @@ files and run the installation on a fresh image."
 }
 
 _download_jukebox_source() {
-  log "#########################################################"
-  print_c "Downloading Phoniebox software from Github ..."
-  print_lc "Download Source: ${GIT_URL}/${GIT_BRANCH}"
-
-  cd "${HOME_PATH}" || exit_on_error "ERROR: Changing to home dir failed."
-  wget -qO- "${GIT_URL}/tarball/${GIT_BRANCH}" | tar xz
-  # Use case insensitive search/sed because user names in Git Hub are case insensitive
-  local git_repo_download=$(find . -maxdepth 1 -type d -iname "${GIT_USER}-${GIT_REPO_NAME}-*")
-  log "GIT REPO DOWNLOAD = $git_repo_download"
-  GIT_HASH=$(echo "$git_repo_download" | sed -rn "s/.*${GIT_USER}-${GIT_REPO_NAME}-([0-9a-fA-F]+)/\1/ip")
-  # Save the git hash for this particular download for later git repo initialization
-  log "GIT HASH = $GIT_HASH"
-  if [[ -z "${git_repo_download}" ]]; then
-    exit_on_error "ERROR: Couldn't find git download."
-  fi
-  if [[ -z "${GIT_HASH}" ]]; then
-    exit_on_error "ERROR: Couldn't determine git hash from download."
-  fi
-  mv "$git_repo_download" "$GIT_REPO_NAME" || exit_on_error "ERROR: Can't overwrite existing installation."
-  log "\nDONE: Downloading Phoniebox software from Github"
-  log "#########################################################"
+  print_lc "skipping download."
+#  log "#########################################################"
+#  print_c "Downloading Phoniebox software from Github ..."
+#  print_lc "Download Source: ${GIT_URL}/${GIT_BRANCH}"
+#
+#  cd "${HOME_PATH}" || exit_on_error "ERROR: Changing to home dir failed."
+#  wget -qO- "${GIT_URL}/tarball/${GIT_BRANCH}" | tar xz
+#  # Use case insensitive search/sed because user names in Git Hub are case insensitive
+#  local git_repo_download=$(find . -maxdepth 1 -type d -iname "${GIT_USER}-${GIT_REPO_NAME}-*")
+#  log "GIT REPO DOWNLOAD = $git_repo_download"
+#  GIT_HASH=$(echo "$git_repo_download" | sed -rn "s/.*${GIT_USER}-${GIT_REPO_NAME}-([0-9a-fA-F]+)/\1/ip")
+#  # Save the git hash for this particular download for later git repo initialization
+#  log "GIT HASH = $GIT_HASH"
+#  if [[ -z "${git_repo_download}" ]]; then
+#    exit_on_error "ERROR: Couldn't find git download."
+#  fi
+#  if [[ -z "${GIT_HASH}" ]]; then
+#    exit_on_error "ERROR: Couldn't determine git hash from download."
+#  fi
+#  mv "$git_repo_download" "$GIT_REPO_NAME" || exit_on_error "ERROR: Can't overwrite existing installation."
+#  log "\nDONE: Downloading Phoniebox software from Github"
+#  log "#########################################################"
 }
 
 _load_sources() {
@@ -136,14 +137,14 @@ _load_sources() {
 ### SETUP LOGGING
 _setup_logging
 
-### CHECK PREREQUISITE
-_check_existing_installation
-
-### RUN INSTALLATION
+#### CHECK PREREQUISITE
+##_check_existing_installation
+#
+#### RUN INSTALLATION
 log "Current User: $CURRENT_USER"
 log "User home dir: $HOME_PATH"
-
-_download_jukebox_source
+#
+#_download_jukebox_source
 cd "${INSTALLATION_PATH}" || exit_on_error "ERROR: Changing to install dir failed."
 _load_sources
 

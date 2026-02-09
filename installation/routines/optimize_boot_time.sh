@@ -12,12 +12,12 @@ _optimize_disable_irrelevant_services() {
   log "  Disable keyboard-setup.service"
   sudo systemctl disable keyboard-setup.service
 
-  log "  Disable triggerhappy.service"
-  sudo systemctl disable triggerhappy.service
-  sudo systemctl disable triggerhappy.socket
+#  log "  Disable triggerhappy.service"
+#  sudo systemctl disable triggerhappy.service
+#  sudo systemctl disable triggerhappy.socket
 
-  log "  Disable raspi-config.service"
-  sudo systemctl disable raspi-config.service
+#  log "  Disable raspi-config.service"
+#  sudo systemctl disable raspi-config.service
 
   log "  Disable apt-daily.service & apt-daily-upgrade.service"
   sudo systemctl disable apt-daily.service
@@ -48,8 +48,8 @@ EOF
 _optimize_handle_bluetooth() {
   if [ "$DISABLE_BLUETOOTH" = true ] ; then
     print_lc "  Disable bluetooth"
-    sudo systemctl disable hciuart.service
-    sudo systemctl disable bluetooth.service
+#    sudo systemctl disable hciuart.service
+#    sudo systemctl disable bluetooth.service
   fi
 }
 
@@ -150,16 +150,16 @@ _optimize_check() {
 
 
     verify_optional_service_enablement keyboard-setup.service disabled
-    verify_optional_service_enablement triggerhappy.service disabled
-    verify_optional_service_enablement triggerhappy.socket disabled
-    verify_optional_service_enablement raspi-config.service disabled
+#    verify_optional_service_enablement triggerhappy.service disabled
+#    verify_optional_service_enablement triggerhappy.socket disabled
+#    verify_optional_service_enablement raspi-config.service disabled
     verify_optional_service_enablement apt-daily.service disabled
     verify_optional_service_enablement apt-daily-upgrade.service disabled
     verify_optional_service_enablement apt-daily.timer disabled
     verify_optional_service_enablement apt-daily-upgrade.timer disabled
 
     if [ "$DISABLE_BLUETOOTH" = true ] ; then
-        verify_optional_service_enablement hciuart.service disabled
+#        verify_optional_service_enablement hciuart.service disabled
         verify_optional_service_enablement bluetooth.service disabled
     fi
 
