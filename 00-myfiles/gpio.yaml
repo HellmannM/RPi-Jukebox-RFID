@@ -1,0 +1,52 @@
+pin_factory:
+  type: rpigpio.RPiGPIOFactory
+
+input_devices:
+  PlayPause:
+    type: Button
+    kwargs:
+      pin: 17
+      bounce_time: 0.05
+      pull_up: true
+    actions:
+      on_press:
+        alias: toggle
+
+  PrevTrack:
+    type: Button
+    kwargs:
+      pin: 27
+    actions:
+      on_press:
+        alias: prev_song
+
+  NextTrack:
+    type: Button
+    kwargs:
+      pin: 22
+    actions:
+      on_press:
+        alias: next_song
+
+  VolumeDown:
+    type: Button
+    kwargs:
+      pin: 5
+      hold_time: 0.25
+      hold_repeat: true
+    actions:
+      on_press:
+        alias: change_volume
+        args: -2
+
+  VolumeUp:
+    type: Button
+    kwargs:
+      pin: 6
+      hold_time: 0.25
+      hold_repeat: true
+    actions:
+      on_press:
+        alias: change_volume
+        args: 2
+
